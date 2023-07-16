@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
-project(Vulkan-Starter)
+
+set(Current-Project-Name Vulkan-Starter)
+project(${Current-Project-Name})
 
 # Set C++ standard to a proper standard
 set(CMAKE_CXX_STANDARD 23)
@@ -19,10 +21,10 @@ add_custom_target(copy_assets
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 
 # Create the executable
-add_executable(Vulkan-Starter ${SRC_FILES})
+add_executable(${Current-Project-Name} ${SRC_FILES})
 
 # Link our executable against the libraries
-target_link_libraries(Vulkan-Starter glfw)
-target_link_libraries(Vulkan-Starter Vulkan::Vulkan)
-target_link_libraries(Vulkan-Starter glm::glm)
-add_dependencies(Vulkan-Starter copy_assets)
+target_link_libraries(${Current-Project-Name} glfw)
+target_link_libraries(${Current-Project-Name} Vulkan::Vulkan)
+target_link_libraries(${Current-Project-Name} glm::glm)
+add_dependencies(${Current-Project-Name} copy_assets)
