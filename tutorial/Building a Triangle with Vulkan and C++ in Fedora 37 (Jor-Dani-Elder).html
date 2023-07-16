@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<!-- saved from url=(0083)https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+    <title>Building a Triangle with Vulkan and C++ in Fedora 37 :: Jor-Dani-Elder</title>
+  
+  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="What makes a Triangle less than simple in Vulkan is that by starting a Vulkan project you&#39;re signing up for plenty of up-front thoughts of what you&#39;re building, as well as filling-in the fields that Vulkan expects of Graphical Applications both small and massive.">
+<meta name="keywords" content="C++, CMake, Vulkan, GLFW, Fedora, Linux">
+<meta name="robots" content="noodp">
+<link rel="canonical" href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/">
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="./Building a Triangle with Vulkan and C++ in Fedora 37 (Jor-Dani-Elder)_files/style.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="https://jordanielder.com/img/theme-colors/blue.png">
+  <link rel="apple-touch-icon" href="https://jordanielder.com/img/theme-colors/blue.png">
+
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Building a Triangle with Vulkan and C++ in Fedora 37">
+<meta property="og:description" content="What makes a Triangle less than simple in Vulkan is that by starting a Vulkan project you&#39;re signing up for plenty of up-front thoughts of what you&#39;re building, as well as filling-in the fields that Vulkan expects of Graphical Applications both small and massive.">
+<meta property="og:url" content="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/">
+<meta property="og:site_name" content="Jor-Dani-Elder">
+
+  
+  
+    
+  
+  <meta property="og:image" content="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/images/Vulkan-C++-Thumb.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-01-14 18:23:21 -0600 -0600">
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="blue" data-new-gr-c-s-check-loaded="14.1115.0" data-gr-ext-installed="">
+
+
+<div class="container center headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="https://jordanielder.com/">
+  <div class="logo">
+    Jor-Dani-Elder
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="https://onallsides.rocks/">Band</a></li>
+        
+      
+        
+          <li><a href="https://jordanielder.com/posts/contact/">Contact</a></li>
+        
+      
+        
+          <li><a href="https://jordanielder.com/posts/gallery/">Gallery</a></li>
+        
+      
+        
+          <li><a href="https://github.com/Jmac217/hugotest">GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/jordanelder10/">LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://fosstodon.org/@Jordanielder">Mastodon</a></li>
+        
+      
+        
+          <li><a href="https://jordanielder.com/index.xml">RSS</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/@jmac217x/">YouTube</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="https://onallsides.rocks/">Band</a></li>
+        
+      
+        
+          <li><a href="https://jordanielder.com/posts/contact/">Contact</a></li>
+        
+      
+        
+          <li><a href="https://jordanielder.com/posts/gallery/">Gallery</a></li>
+        
+      
+        
+          <li><a href="https://github.com/Jmac217/hugotest">GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/jordanelder10/">LinkedIn</a></li>
+        
+      
+        
+          <li><a href="https://fosstodon.org/@Jordanielder">Mastodon</a></li>
+        
+      
+        
+          <li><a href="https://jordanielder.com/index.xml">RSS</a></li>
+        
+      
+        
+          <li><a href="https://www.youtube.com/@jmac217x/">YouTube</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/">Building a Triangle with Vulkan and C++ in Fedora 37</a>
+  </h1>
+  <div class="post-meta">
+    
+      <time class="post-date">
+        2023-01-14 ::
+        
+      </time>
+    
+    
+    
+      <span class="post-reading-time">:: 30 min read (6249 words)</span>
+    
+  </div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://jordanielder.com/tags/c++/">C++</a>&nbsp;
+      
+      #<a href="https://jordanielder.com/tags/cmake/">CMake</a>&nbsp;
+      
+      #<a href="https://jordanielder.com/tags/vulkan/">Vulkan</a>&nbsp;
+      
+      #<a href="https://jordanielder.com/tags/glfw/">GLFW</a>&nbsp;
+      
+      #<a href="https://jordanielder.com/tags/fedora/">Fedora</a>&nbsp;
+      
+      #<a href="https://jordanielder.com/tags/linux/">Linux</a>&nbsp;
+      
+    </span>
+  
+  
+  <img src="./Building a Triangle with Vulkan and C++ in Fedora 37 (Jor-Dani-Elder)_files/Vulkan-C++-Thumb.png" class="post-cover" alt="Building a Triangle with Vulkan and C++ in Fedora 37" title="Cover Image">
+
+
+  
+
+  <div class="post-content"><div>
+        <h1 id="navigation">Navigation<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#navigation" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<ul>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Beginning">Beginning the Journey</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#PreRequisites">Pre-requisites</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Material">The Material</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Download">Downloading The Boilerplate</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#VulkanSDK">VulkanSDK</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#DNF">DNF</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#CMake">CMake</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Test">Testing Vulkan</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#StartingLine">Starting Line</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Moves">Window Notes</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Notes">Initial Directory Structure</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Window">Vulkan Window</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#FirstApp">FirstApp Class</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#JdeWindow">JdeWindow Class</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#main">Main Function</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Open">Launching the Window</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#HardPart">The Hard Part</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#TriDir">Full Directory Structure</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#ShaderChain">Shader Chain</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#ShaderCompile">Shader Compilation</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Triangle">Starting The Triangle</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#FirstTriangleHpp">Revamped first_app.hpp</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#FirstTriangleCpp">Revamped first_app.cpp</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#PipelineHpp">Graphics Pipeline Configuration jde_pipeline.hpp</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#PipelineCpp">Graphics Pipeline Configuration jde_pipeline.cpp</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#WindowHpp">Revamped jde_window.hpp</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#WindowCpp">Revamped jde_window.cpp</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#BuildTriangle">Build The Triangle</a></li>
+<li><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Launch">Launch The Triangle!</a></li>
+</ul>
+<h1 id="Beginning">Beginning the Journey<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Beginning" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>I’ve been looking at Vulkan from afar for 6 months while I honed my C++ skills and worked through SFML, GLFW, and OpenGL, along with a few windowing frameworks like ImGui and GTK3, but all of that work just barely prepared me for this most arduous of tasks… The legendary Vulkan Triangle! Settle in, this is going to take some time to even read through, let alone work through!</p>
+<p>I sat down about <del>8 hours ago</del> yesterday, now at the time of finishing the post, thinking this might not be so bad, and in some ways it’s not <em>that bad</em>, but comparing it to everything I’ve done till now, it is the <em>hardest thing</em> I’ve had to comprehend in programming. What makes a Triangle less than simple in Vulkan is that by simply starting a Vulkan project you’re signing up for plenty of up-front thinking through the architecture of what you’re building as well as filling in the fields that Vulkan expects of Graphical Applications both small and massive. The tried and true OpenGL was pretty dang quick to get up and running and gave you a sense of <em>“I can do this!”</em>, but then at every turn there was something to add to your API, and if you didn’t know it was coming it could derail your project to the point of no return. Having gone through a few of the stumbling points with OpenGL I had <em>some</em> idea of what I was getting into with Vulkan, but not nearly enough to think twice about sitting down with it tonight. <strong>TL;DR: Vulkan forces you to double check your vision before stepping into the pitfalls you’ll surely encounter with OpenGL.</strong></p>
+<p>All of the content from this post summarizes the first 6 videos of <a href="https://www.youtube.com/watch?v=Y9U9IE0gVHA&amp;list=PL8327DO66nu9qYVKLDmdLW_84-yE4auCR">Brendan Galea’s</a> Vulkan Game Engine YouTube Series.</p>
+<hr>
+<h1 id="PreRequisites">Pre-requisites<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#PreRequisites" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>This must be the longest list of pre-requisites I’ve seen in a post, let-alone a post I wrote, but it’s all of the things you need to get going on Fedora Linux <em>version 37 at the time of writing this</em>.</p>
+<h1 id="Material">The Material<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Material" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>I didn’t set out to follow a tutorial, but I absolutely had to, and everyone recommended <a href="https://www.youtube.com/watch?v=Y9U9IE0gVHA&amp;list=PL8327DO66nu9qYVKLDmdLW_84-yE4auCR">Brendan Galea’s Vulkan Game Engine Tutorial</a> over the last few months of casually looking into this. I decided that it was going to be the quickest way to get up and running in a manner that would allow me to continue learning and would align with my overall plans for Vulkan, which is to incorporate it into an game engine for myself to learn with.</p>
+<p>I’m going to use <a href="https://www.youtube.com/watch?v=Y9U9IE0gVHA&amp;list=PL8327DO66nu9qYVKLDmdLW_84-yE4auCR">Brendan’s tutorial</a> as reference for some of the points I talk about, but mostly I’m going to make his process more specific to Linux and even more specifically Fedora. Fedora makes for a great workstation, so that’s where I’ve been spending my last few months.</p>
+<h1 id="Download">Download These And Make Edits Accordingly<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Download" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p><a href="https://www.youtube.com/watch?v=Y9U9IE0gVHA&amp;list=PL8327DO66nu9qYVKLDmdLW_84-yE4auCR">Brendan</a> has 4 files hosted that you’ll need to download and follow his short instructions on what to change in those files, these links will take you to the timestamp in the videos, as well as to the download location within the description of the videos.</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=LYKlEIzGmW4&amp;t=94s">lve_device.cpp &amp; lve_device.hpp</a></li>
+<li><a href="https://www.youtube.com/watch?v=IUYH74MqxOA&amp;t=194s">lve_swap_chain.cpp &amp; lve_swap_chain.hpp</a></li>
+</ul>
+<hr>
+<h1 id="VulkanSDK">VulkanSDK<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#VulkanSDK" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>The biggest thing to get going up front is to <a href="https://vulkan.lunarg.com/sdk/home#linux">Download the VulkanSDK</a> and get it properly set up in your environment for use with <code>glslc</code>.</p>
+<p>When you get the <code>SDK - SDK Installer</code> <code>vulkansdk-linux-x86_64-1.3.236.0.tar.gz</code> (at the time of writing this) file downloaded, follow the next few commands to get the ball rolling on this setup process. NOTE: There’s a script in the tar archive that is supposed to make it easy to install, but it didn’t work for me, so I created a new directory at <code>~/VulkanSDK</code> and moved our tar into it:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token function">mkdir</span> ~/VulkanSDK
+<span class="token builtin class-name">cd</span> ~/VulkanSDK
+<span class="token function">tar</span> -xzvf vulkansdk-linux-x86_64-1.3.236.0.tar.gz
+<span class="token builtin class-name">cd</span> <span class="token number">1.3</span>.236.0/x86_64
+<span class="token builtin class-name">pwd</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p><code>pwd</code> will output the <code>path</code> you’ll need for the <code>$VULKAN_SDK</code> environment variable</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-txt"><code class=" language-txt" data-lang="txt">/home/USERNAME/VulkanSDK/1.3.236.0/x86_64
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>From there you can copy that <code>path</code> and use it for the following instructions.<br>
+since most people are using <code>BASH</code> I’ll post the instructions for that first,<br>
+but I’ll go into detail about the <code>fish</code> solution as well!</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">VULKAN_SDK</span><span class="token operator">=</span><span class="token string">"/home/USERNAME/VulkanSDK/1.3.236.0/x86_64/"</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"<span class="token variable">$VULKAN_SDK</span>/bin:<span class="token environment constant">$PATH</span>"</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>Run those in your terminal to add them temporarily, or add them to your <code>~/.bashrc</code> or <code>~/.bash_profile</code> or somewhere else you can think of.</p>
+<p>Next up the solution that <a href="https://fishshell.com/">Fish Shell</a> users have to live with:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token builtin class-name">set</span> -gx VULKAN_SDK <span class="token string">"/home/USERNAME/VulkanSDK/1.3.236.0/x86_64/"</span>
+fish_add_path <span class="token variable">$VULKAN_SDK</span>/bin/
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>those are now added permenantly to your path, you can overwrite them them with the same command if you make a typo, or clear them entirely with another <code>set</code> command.</p>
+<h1 id="you-should-now-be-able-to-run-glslc">You should now be able to run <code>glslc</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#you-should-now-be-able-to-run-glslc" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>test this by issuing a simple:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash">glslc --version
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>and you should see:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-text"><code class=" language-text" data-lang="text">shaderc v2022.4 v2022.4
+spirv-tools v2022.5-dev v2022.4-28-gd9446130
+glslang 11.1.0-605-g728c6895
+
+Target: SPIR-V 1.0
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><h1 id="DNF">DNF<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#DNF" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>Now that the manual setup is out of the way is out of the way it’s time to get our development environment up and going!</p>
+<p><em><code>dnf</code> all the things!</em></p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token function">sudo</span> dnf <span class="token function">install</span> <span class="token punctuation">\</span>
+    @<span class="token string">"Development Tools"</span> <span class="token punctuation">\</span>
+    vulkan-headers <span class="token punctuation">\</span>
+    vulkan-loader-devel <span class="token punctuation">\</span>
+    vulkan-tools <span class="token punctuation">\</span>
+    vulkan-validation-layers <span class="token punctuation">\</span>
+    vulkan-devel <span class="token punctuation">\</span>
+    libcxx-devel <span class="token punctuation">\</span>
+    libcxx <span class="token punctuation">\</span>
+    glm-devel <span class="token punctuation">\</span>
+    cmake <span class="token punctuation">\</span>
+    libpng-devel <span class="token punctuation">\</span>
+    wayland-devel <span class="token punctuation">\</span>
+    libpciaccess-devel <span class="token punctuation">\</span>
+    libX11-devel <span class="token punctuation">\</span>
+    libXpresent <span class="token punctuation">\</span>
+    libxcb <span class="token punctuation">\</span>
+    xcb-util <span class="token punctuation">\</span>
+    libxcb-devel <span class="token punctuation">\</span>
+    libXrandr-devel <span class="token punctuation">\</span>
+    xcb-util-keysyms-devel <span class="token punctuation">\</span>
+    xcb-util-wm-devel <span class="token punctuation">\</span>
+    python3 <span class="token punctuation">\</span>
+    <span class="token function">git</span> <span class="token punctuation">\</span>
+    lz4-devel <span class="token punctuation">\</span>
+    libzstd-devel <span class="token punctuation">\</span>
+    python3-distutils-extra <span class="token punctuation">\</span>
+    qt <span class="token punctuation">\</span>
+    gcc-g++ <span class="token punctuation">\</span>
+    wayland-protocols-devel <span class="token punctuation">\</span>
+    ninja-build <span class="token punctuation">\</span>
+    python3-jsonschema <span class="token punctuation">\</span>
+    qt5-qtbase-devel <span class="token punctuation">\</span>
+    qt <span class="token punctuation">\</span>
+    xinput <span class="token punctuation">\</span>
+    libXinerama
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><h2 id="CMake">CMake<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#CMake" class="hanchor" arialabel="Anchor">⌗</a> </h2>
+<p>My preferred build generator is CMake even with its blemishes. I’ve used a few dirty tricks to get this going quickly.</p>
+<h2 id="cmakeliststxt"><code>CmakeLists.txt</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#cmakeliststxt" class="hanchor" arialabel="Anchor">⌗</a> </h2>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cmake"><code class=" language-cmake" data-lang="cmake"><span class="token comment"># CMakeLists.txt</span>
+
+<span class="token keyword keyword-cmake_minimum_required">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.25</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-project">project</span><span class="token punctuation">(</span>Vulkan-Starter<span class="token punctuation">)</span>
+
+<span class="token comment"># Set C++ standard to a proper standard</span>
+<span class="token keyword keyword-set">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD</span> <span class="token number">20</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Add the GLFW and Vulkan libraries</span>
+<span class="token keyword keyword-find_package">find_package</span><span class="token punctuation">(</span>glfw3 REQUIRED<span class="token punctuation">)</span>
+<span class="token keyword keyword-find_package">find_package</span><span class="token punctuation">(</span>Vulkan REQUIRED<span class="token punctuation">)</span>
+<span class="token keyword keyword-find_package">find_package</span><span class="token punctuation">(</span>glm REQUIRED<span class="token punctuation">)</span>
+
+<span class="token comment"># Copy contents of src/shaders to the binary location</span>
+<span class="token keyword keyword-add_custom_target">add_custom_target</span><span class="token punctuation">(</span>copy_assets
+    COMMAND <span class="token punctuation">${</span><span class="token variable">CMAKE_COMMAND</span><span class="token punctuation">}</span> -E copy_directory <span class="token punctuation">${</span><span class="token variable">CMAKE_CURRENT_LIST_DIR</span><span class="token punctuation">}</span>/src/shaders
+    <span class="token punctuation">${</span><span class="token variable">CMAKE_CURRENT_BINARY_DIR</span><span class="token punctuation">}</span>/src/shaders
+<span class="token punctuation">)</span>
+
+<span class="token comment"># Dirty way to add all source files in the ./src directory</span>
+<span class="token keyword keyword-file">file</span><span class="token punctuation">(</span>GLOB_RECURSE SRC_FILES <span class="token string">"src/*.cpp"</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Create the executable</span>
+<span class="token keyword keyword-add_executable">add_executable</span><span class="token punctuation">(</span>Vulkan-Starter <span class="token punctuation">${</span>SRC_FILES<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Link our executable against the libraries</span>
+<span class="token keyword keyword-target_link_libraries">target_link_libraries</span><span class="token punctuation">(</span>Vulkan-Starter glfw<span class="token punctuation">)</span>
+<span class="token keyword keyword-target_link_libraries">target_link_libraries</span><span class="token punctuation">(</span>Vulkan-Starter <span class="token inserted class-name">Vulkan::Vulkan</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-target_link_libraries">target_link_libraries</span><span class="token punctuation">(</span>Vulkan-Starter <span class="token inserted class-name">glm::glm</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-add_dependencies">add_dependencies</span><span class="token punctuation">(</span>Vulkan-Starter copy_assets<span class="token punctuation">)</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><blockquote>
+<p>A <code>CMakeLists.txt</code> file is used to configure C and C++ projects with CMake, ours is called “Vulkan-Starter”.</p>
+</blockquote>
+<ul>
+<li>
+<p>This config sets the C++ standard to version 20, which is the latest version of C++ for now! <em>I’m impatiently waiting for C++23 this year!</em></p>
+</li>
+<li>
+<p>We’ll use the <code>find_package</code> command to locate and include the <code>GLFW</code>, <code>Vulkan</code> and <code>GLM</code> libraries, which are required for the <code>project</code>.</p>
+</li>
+<li>
+<p>Create a custom target that I’ve named <code>copy_assets</code> which copies the contents of the <code>src/shaders</code> directory to the binary directory, the directory where the executable gets built.</p>
+</li>
+<li>
+<p>I opted to use <code>file(GLOB_RECURSE SRC_FILES "src/*.cpp")</code> to add all source files in the <code>src/</code> directory to the <code>SRC_FILES</code> variable… This is not a recommended option for modern CMake, but it does work, and <em>before release</em> you’d want to do a full revamp on the <code>CMakeLists.txt</code> file anyway.</p>
+</li>
+<li>
+<p>Finally we create an executable called <code>Vulkan-Starter</code> using the <code>add_executable</code> command and links it against the <code>GLFW</code>, <code>Vulkan</code>, and <code>GLM</code> libraries using the <code>target_link_libraries</code> command.</p>
+</li>
+<li>
+<p>The way that assets are handled is with a dependency between the <code>executable</code> and the custom target <code>copy_assets</code> using the <code>add_dependencies</code> command so that the <em>assets</em> are <em>copied before</em> the executable is built.</p>
+</li>
+</ul>
+<h2 id="Test">Testing Vulkan<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Test" class="hanchor" arialabel="Anchor">⌗</a> </h2>
+<p>This file can be copied to use as a test for your environment. If you don’t have any errors then you’re ready to move on!</p>
+<h1 id="maincpp"><code>main.cpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#maincpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token comment">// main.cpp</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GLFW_INCLUDE_VULKAN</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"GLFW/glfw3.h"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GLM_FORCE_RADIANS</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GLM_FORCE_DEPTH_ZERO_TO_ONE</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"glm/mat4x4.hpp"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"glm/vec4.hpp"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+
+<span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token function">glfwInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">glfwWindowHint</span><span class="token punctuation">(</span>GLFW_CLIENT_API<span class="token punctuation">,</span> GLFW_NO_API<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    GLFWwindow<span class="token operator">*</span> window <span class="token operator">=</span> <span class="token function">glfwCreateWindow</span><span class="token punctuation">(</span><span class="token number">800</span><span class="token punctuation">,</span> <span class="token number">600</span><span class="token punctuation">,</span> <span class="token string">"Vulkan Window"</span><span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-uint32_t">uint32_t</span> extensionCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">vkEnumerateInstanceExtensionProperties</span><span class="token punctuation">(</span><span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>extensionCount<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> extensionCount <span class="token operator">&lt;&lt;</span> <span class="token string">" extensions supported\n"</span><span class="token punctuation">;</span>
+
+    glm<span class="token double-colon punctuation">::</span>mat4 matrix<span class="token punctuation">;</span>
+    glm<span class="token double-colon punctuation">::</span>vec4 vec<span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-auto">auto</span> test <span class="token operator">=</span> matrix <span class="token operator">*</span> vec<span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">glfwWindowShouldClose</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">glfwPollEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">glfwDestroyWindow</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">glfwTerminate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>This is just a simple introduction to the world of Vulkan graphics programming! Ultimately this file should open a GLFW window.</p>
+<ul>
+<li>
+<p>Our entrypoint starts by initializing the <code>GLFW</code> library, which we use to create a window that will serve as the canvas for our Vulkan graphics. We then specify that we want to use the <em>Vulkan client API</em>, and create a window with a width of 800 pixels, a height of 600 pixels, and the title “Vulkan Window”.</p>
+</li>
+<li>
+<p>Next, we use the <code>vkEnumerateInstanceExtensionProperties</code> function to determine the number of extensions supported by the current system. This information is then output to the console. My number was 20, but yours could be anything depending on your machine.</p>
+</li>
+<li>
+<p>We also utilize the <code>GLM</code> library for some matrix and vector operations, specifically creating a <em>4x4 matrix</em> and a <em>4-element vector</em>, and then performing a <em>matrix-vector multiplication</em>.</p>
+</li>
+<li>
+<p>Finally, we enter a loop that repeatedly polls for events and continues running as long as the window remains open. Once the window is closed, we clean up by destroying the window and shutting down <code>GLFW</code>.</p>
+</li>
+<li>
+<p>Overall, this program serves as a basic introduction to some key concepts and libraries in the world of Vulkan programming, and is a great starting point for our upcoming triangle.</p>
+</li>
+</ul>
+<h1 id="StartingLine">The Starting Line<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#StartingLine" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p><img src="./Building a Triangle with Vulkan and C++ in Fedora 37 (Jor-Dani-Elder)_files/starting-line.png" alt="Starting-Line"></p>
+<p><a href="https://www.khronos.org/spir/">SPIR-V</a> is the format that Vulkan expects for our shaders which is why we had to download VulkanSDK and get <code>glslc</code> added to the path
+The <code>CMakeLists.txt</code> sets up everything our project will need<br>
+and the <code>main.cpp</code> file utilizes GLFW to create a Window and logs the number of extensions supported by <code>vkEnumerateInstanceExtensionProperties</code><br>
+which in my case is <code>20 extensions supported</code> and is the only use for this file.<br>
+Since the purpose of this <code>main.cpp</code> was to simply test our installation you may now remove all of the code from it and follow along with <a href="https://www.youtube.com/watch?v=Y9U9IE0gVHA&amp;list=PL8327DO66nu9qYVKLDmdLW_84-yE4auCR">Brendan Galea’s Vulkan Game Engine Tutorial series on YouTube</a></p>
+<hr>
+<h1 id="Moves">Let’s Make Some Moves!<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Moves" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>Getting a <em>window</em> up and running with <code>Vulkan</code> is exactly the same as it would be with <code>OpenGL</code> and <code>GLFW</code>. I am very glad to have had a chance to play with GLFW when I did to smooth out this process!</p>
+<p>I always prefer to start from the last file written and work my way backwards to the first. It usually layers properly in my brain that way, so we’ll be starting with <code>first_app.cpp</code> and work our way backwards ending with <code>main.cpp</code>.</p>
+<hr>
+<h2 id="Notes">Code Notes<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Notes" class="hanchor" arialabel="Anchor">⌗</a> </h2>
+<ul>
+<li>anything you see that has <code>jde</code> or <code>Jde</code> is something that I changed, and is something that <em>YOU</em> can also change! In the <a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/">videos</a> you’ll notice these are originally <code>lve</code> and <code>Lve</code> but you should change these to something for yourself as it helps with the learning process.</li>
+<li>every translation unit is namespaced with <code>jde</code> which was also originally <code>lve</code> in the tutorial</li>
+</ul>
+<p>we’re starting with a small directory structure that will just create a GLFW window:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-txt"><code class=" language-txt" data-lang="txt">├── CMakeLists.txt                      BUILDS PROJECT
+└── src
+    ├── first_app.cpp                   
+    ├── first_app.hpp                   CLASS "FirstApp"
+    ├── jde_window.cpp                  
+    ├── jde_window.hpp                  CLASS "JdeWindow"
+    └── main.cpp                        ENTRY POINT
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><ul>
+<li><strong>remember</strong> it’s totally encouraged to change anything named <code>jde</code> or <code>Jde</code> to your liking, but the two <strong>are</strong> case sensitve!</li>
+</ul>
+<hr>
+<h1 id="Window">Starting The Vulkan Window<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Window" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<h1 id="FirstApp">The <code>FirstApp</code> Class<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#FirstApp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<blockquote>
+<p>calls <code>FirstApp::run()</code> in the <code>jde</code> namespace which contains a <code>while</code> loop that repeatedly calls <code>glfwPollEvents()</code> until the <code>jdeWindow</code> member variable of the <code>FirstApp</code> class returns <code>true</code> for the <code>shouldClose()</code> method. This is our <code>Game Loop</code>.</p>
+</blockquote>
+<h2 id="first_appcpp"><code>first_app.cpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#first_appcpp" class="hanchor" arialabel="Anchor">⌗</a> </h2>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token comment">// first_app.cpp</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"first_app.hpp"</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>jdeWindow<span class="token punctuation">.</span><span class="token function">shouldClose</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">glfwPollEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><h2 id="first_apphpp"><code>first_app.hpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#first_apphpp" class="hanchor" arialabel="Anchor">⌗</a> </h2>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token comment">// first_app.hpp</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_window.hpp"</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-class">class</span> <span class="token class-name">FirstApp</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-public">public</span><span class="token operator">:</span>
+        <span class="token keyword keyword-static">static</span> <span class="token keyword keyword-constexpr">constexpr</span> <span class="token keyword keyword-int">int</span> WIDTH <span class="token operator">=</span> <span class="token number">800</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-static">static</span> <span class="token keyword keyword-constexpr">constexpr</span> <span class="token keyword keyword-int">int</span> HEIGHT <span class="token operator">=</span> <span class="token number">600</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span><span class="token operator">:</span>
+        JdeWindow jdeWindow<span class="token punctuation">{</span>WIDTH<span class="token punctuation">,</span> HEIGHT<span class="token punctuation">,</span> <span class="token string">"Hello Vulkan!"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>note that we are including <code>jde_window.hpp</code> in the header in this file; the header for our <code>FirstApp</code> class in the <code>jde</code> namespace. This is where we define the <code>WIDTH</code> and <code>HEIGHT</code> of the application as <code>static constexpr int</code>, and at a resolution of <code>800x600</code>. Finally the <code>private method</code> <code>jdeWindow</code> is initialized with our height and width when <code>run()</code> is called and our game loop begins;</p>
+<hr>
+<h3 id="JdeWindow">The <code>JdeWindow</code> Class<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#JdeWindow" class="hanchor" arialabel="Anchor">⌗</a> </h3>
+<h1 id="jde_windowhpp"><code>jde_window.hpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#jde_windowhpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GLFW_INCLUDE_VULKAN</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;GLFW/glfw3.h&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string&gt;</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+    <span class="token keyword keyword-class">class</span> <span class="token class-name">JdeWindow</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-public">public</span><span class="token operator">:</span>
+        <span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> w<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> h<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">~</span><span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> JdeWindow <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+        JdeWindow <span class="token operator">&amp;</span><span class="token keyword keyword-operator">operator</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> JdeWindow <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-bool">bool</span> <span class="token function">shouldClose</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword keyword-return">return</span> <span class="token function">glfwWindowShouldClose</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token keyword keyword-private">private</span><span class="token operator">:</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">initWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-const">const</span> <span class="token keyword keyword-int">int</span> width<span class="token punctuation">;</span>
+        <span class="token keyword keyword-const">const</span> <span class="token keyword keyword-int">int</span> height<span class="token punctuation">;</span>
+
+        std<span class="token double-colon punctuation">::</span>string windowName<span class="token punctuation">;</span>
+        GLFWwindow <span class="token operator">*</span>window<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>this is our window class <code>JdeWindow</code>, its constructor takes a <code>w</code>, <code>h</code>, and a <code>name</code> which are used to initialize the <code>width</code>, <code>height</code>, and <code>name</code> of the window. We properly handle the available constructors, and the destructor destroys the window and terminates GLFW. The class has <em>deleted <code>copy constructor</code> and copy <code>assignment operator</code></em>, which means that instances of this class cannot be copied. This is where our <code>game loop</code> is requested to terminate. <code>JdeWindow</code> has a public method called <code>shouldClose()</code>, which returns a bool indicating whether the window has been closed or not. Finally there is also one private method <code>initWindow()</code> that actually initializes the window. The private variables store width, height, and the name of the GLFW window.</p>
+<h1 id="jde_windowcpp"><code>jde_window.cpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#jde_windowcpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token comment">// jde_window.cpp</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_window.hpp"</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token class-name">JdeWindow</span><span class="token double-colon punctuation">::</span><span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> w<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> h<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string name<span class="token punctuation">)</span><span class="token operator">:</span>
+        width<span class="token punctuation">{</span>w<span class="token punctuation">}</span><span class="token punctuation">,</span> height<span class="token punctuation">{</span>h<span class="token punctuation">}</span><span class="token punctuation">,</span> windowName<span class="token punctuation">{</span>name<span class="token punctuation">}</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">initWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token class-name">JdeWindow</span><span class="token double-colon punctuation">::</span><span class="token operator">~</span><span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">glfwDestroyWindow</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">glfwTerminate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">JdeWindow</span><span class="token double-colon punctuation">::</span><span class="token function">initWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">glfwInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">glfwWindowHint</span><span class="token punctuation">(</span>GLFW_CLIENT_API<span class="token punctuation">,</span> GLFW_NO_API<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">glfwWindowHint</span><span class="token punctuation">(</span>GLFW_RESIZABLE<span class="token punctuation">,</span> GLFW_FALSE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        window <span class="token operator">=</span> <span class="token function">glfwCreateWindow</span><span class="token punctuation">(</span>width<span class="token punctuation">,</span> height<span class="token punctuation">,</span> windowName<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><ul>
+<li><code>jde_window.cpp</code> code starts by including the <code>jde_window.hpp</code> header file, which contains declarations for the <code>JdeWindow</code> class.</li>
+<li>our namespace <code>jde</code> is defined.</li>
+<li>The <code>JdeWindow</code> class is defined, which has a constructor that takes in three parameters: <code>width</code>, <code>height</code>, and a <em>string</em> <code>name</code>.</li>
+<li>In the <code>constructor</code>, the input parameters are assigned to the <em>member variables</em> of the class. Then the function <code>initWindow()</code> is called.</li>
+<li>A <code>destructor</code> is defined, which is called when the <code>JdeWindow</code> object is destroyed. It destroys the window and terminates <code>GLFW</code>.</li>
+<li>The <code>initWindow()</code> function is defined, which initializes <code>GLFW</code> and sets some <em>window hints</em>.</li>
+<li>The <code>GLFW</code> library is initialized.</li>
+<li>The <code>GLFW_CLIENT_API</code> hint is set to <code>GLFW_NO_API</code> to indicate that no graphics API is used</li>
+<li>The <code>GLFW_RESIZABLE</code> hint is set to <code>GLFW_FALSE</code> to indicate that the window is <em>not resizable</em></li>
+<li>A <em>window</em> is created with the specified <code>width</code>, <code>height</code> and <code>name</code>.</li>
+<li>The <em>window pointer</em> is assigned to the window member variable.</li>
+</ul>
+<h3 id="main">Making Entry in <code>main.cpp</code>!<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#main" class="hanchor" arialabel="Anchor">⌗</a> </h3>
+<blockquote>
+<p>We now get to hit the <code>run()</code> command we saw very first! This is the <code>main()</code> function of the application, which is the entry point of our window!</p>
+</blockquote>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"first_app.hpp"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cstdlib&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdexcept&gt;</span></span>
+
+<span class="token keyword keyword-int">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    jde<span class="token double-colon punctuation">::</span>FirstApp app<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-try">try</span> <span class="token punctuation">{</span>
+        app<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword keyword-catch">catch</span> <span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>exception <span class="token operator">&amp;</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        std<span class="token double-colon punctuation">::</span>cerr <span class="token operator">&lt;&lt;</span> e<span class="token punctuation">.</span><span class="token function">what</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token string">'\n'</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-return">return</span> EXIT_FAILURE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-return">return</span> EXIT_SUCCESS<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>Our entrypoint creates an instance of our <code>FirstApp</code> class, which was defined in <code>first_app.hpp</code>, and calls <code>run()</code>; which is responsible for executing our main loop aka game loop, which just keeps running as long as the window is open. This loop keeps running as long as the window is open, by <code>polling</code> the <code>events</code> from the <code>window</code>. I like to use the powerful C++ standard when I can and haven’t had the opportunity to use <em>try-catch blocks</em> in a real-world application yet, so this tutorial has me happy for that. The main function also includes a try-catch block that catches any <em>exceptions</em> that are thrown by the <code>run()</code> method. If an <code>exception</code> is caught, the <em>error message</em> is printed to the <em>standard error output</em> and the program exits with the failure status code: <code>EXIT_FAILURE</code>; otherwise, if the program exits without an <code>exception</code>, it will return the <code>EXIT_SUCCESS</code> status code.</p>
+<h1 id="Open">Opening the Window to the World of Vulkan!<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Open" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>Run the following <code>CMake</code> command <em>if you’re not using something like Emacs or VS Code</em>:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash">cmake -B ./build -S <span class="token builtin class-name">.</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>and you should see around the same output as:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-txt"><code class=" language-txt" data-lang="txt">-- The C compiler identification is GNU 12.2.1
+-- The CXX compiler identification is GNU 12.2.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Vulkan: /lib64/libvulkan.so (found version "1.3.216") found components: glslc glslangValidator 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/mac/Documents/Projects/C++/Vulkan/build
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><blockquote>
+<p>changing into the <em>build directory</em> and issuing a <code>make</code> command is next:</p>
+</blockquote>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token builtin class-name">cd</span> build
+<span class="token function">make</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>or I found that you can run <code>make</code> from anywhere using the <code>-C</code> flag <code>make -C build</code><br>
+in any case you should see something similar to the following output:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-txt"><code class=" language-txt" data-lang="txt">[  0%] Built target copy_assets
+[ 14%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/first_app.cpp.o
+[ 28%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_device.cpp.o
+[ 42%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_pipeline.cpp.o
+[ 57%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_swap_chain.cpp.o
+[ 71%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_window.cpp.o
+[ 85%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/main.cpp.o
+[100%] Linking CXX executable Vulkan-Starter
+[100%] Built target Vulkan-Starter
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>the last line says <code>Built target Vulkan-Starter</code> is what matters, that’s our binary!</p>
+<p>now we can change into the build directory, if you’re not already there <code>cd build</code>, and launch our <del>GLFW</del> Vulkan Window!</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash">./Vulkan-Starter
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p><img src="./Building a Triangle with Vulkan and C++ in Fedora 37 (Jor-Dani-Elder)_files/blank-window.png" alt="blank-window"></p>
+<p>and with any luck you’ll have a fully functional GLFW window that doesn’t immediately exit, but also doesn’t do anything!</p>
+<h1 id="HardPart">Unfortunately That Was the Easy Part<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#HardPart" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>Next we have to build out the entire Vulkan graphics pipeline and an API to interface with the Graphics Card.</p>
+<p><img src="./Building a Triangle with Vulkan and C++ in Fedora 37 (Jor-Dani-Elder)_files/Brendan-Galea-Graphics-Pipeline-Overview-Vulkan-Game-Engine-Tutorial-02.png" alt="Brendan-Galea-Graphics-Pipeline-Overview-Vulkan-Game-Engine-Tutorial-02"></p>
+<ul>
+<li>image credit to Brendan Galea - Vulkan Game Engine Tutorial 2</li>
+</ul>
+<h1 id="TriDir">Directory Structure for the Vulkan Triangle<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#TriDir" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>You’ll need to download these 4 files if you haven’t grabbed them yet!</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=LYKlEIzGmW4&amp;t=94s">lve_device.cpp &amp; lve_device.hpp</a></li>
+<li><a href="https://www.youtube.com/watch?v=IUYH74MqxOA&amp;t=194s">lve_swap_chain.cpp &amp; lve_swap_chain.hpp</a></li>
+<li><em>if you watch the section of the video he talks about the edits you will need to make to those files! Basically it comes down to the namespace and the first few letters of the class name, and each method of the class.</em></li>
+</ul>
+<p>and create 5 more:</p>
+<ul>
+<li><code>glslc.sh</code></li>
+<li><code>jde_pipeline.cpp</code></li>
+<li><code>jde_pipeline.hpp</code></li>
+<li><code>shaders/simple_shader.frag</code></li>
+<li><code>shaders/simple_shader.vert</code></li>
+</ul>
+<p>my project directory tree AFTER <a href="https://youtu.be/_VOR6q3edig?list=PL8327DO66nu9qYVKLDmdLW_84-yE4auCR">video #7</a>:</p>
+<ul>
+<li>the <code>.spv</code> are the compiled output from <code>glslc</code> which we’re getting to soon</li>
+</ul>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-txt"><code class=" language-txt" data-lang="txt">├── CMakeLists.txt                      BUILDS PROJECT
+└── src
+    ├── first_app.cpp                   
+    ├── first_app.hpp                   CLASS "FirstApp"
+    ├── glslc.sh                        COMPILES SHADERS
+    ├── jde_device.cpp                  
+    ├── jde_device.hpp                  CLASS "JdeDevice"
+    ├── jde_pipeline.cpp                
+    ├── jde_pipeline.hpp                CLASS "JdePipeline"
+    ├── jde_swap_chain.cpp              
+    ├── jde_swap_chain.hpp              CLASS "JdeSwapChain"
+    ├── jde_window.cpp                  
+    ├── jde_window.hpp                  CLASS "JdeWindow"
+    ├── main.cpp                        ENTRY POINT
+    └── shaders
+        ├── simple_shader.frag          SPIR-V FRAGMENT SHADER
+        ├── simple_shader.frag.spv      COMPILED SPIR-V FROM GLSLC
+        ├── simple_shader.vert          SPIR-V VERTEX SHADER
+        └── simple_shader.vert.spv      COMPILED SPIR-V FROM GLSLC
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><hr>
+<h1 id="ShaderChain">One Nice Thing About the Shader Chain<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#ShaderChain" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>we can really only program two stages of the shader chain in Vulkan, the <code>Vertex Shader</code> and the <code>Fragment Shader</code>, which are right here:</p>
+<h1 id="srcshaderssimple_shaderfrag"><code>src/shaders/simple_shader.frag</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#srcshaderssimple_shaderfrag" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>is our fragment shader, responsible for determining the color of each pixel on the screen.</p>
+<div class="code-toolbar"><pre tabindex="0" class=" language-hlsl"><code class=" language-hlsl" data-lang="HLSL">#version 450
+
+layout (location =0) out vec4 outColor;
+
+void main()
+{
+    outColor = vec4(1.0, 1.0, 0.1, 1.0);
+}
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div><p>It defines a single output variable “outColor”, which is a 4-component vector representing the red, green, blue, and alpha (transparency) values of the pixel. In the main function, the outColor variable is set to a fixed value of (1.0, 1.0, 0.1, 1.0), which corresponds to a bright yellow color with full opacity.</p>
+<hr>
+<h1 id="srcshaderssimple_shadervert"><code>src/shaders/simple_shader.vert</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#srcshaderssimple_shadervert" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>is our vertex shader, which is responsible for determining the position of each vertex in the 3D space.</p>
+<div class="code-toolbar"><pre tabindex="0" class=" language-hlsl"><code class=" language-hlsl" data-lang="HLSL">#version 450
+
+vec2 positions[3] = vec2[](
+    vec2(0.0, -0.5),
+    vec2(0.5, 0.5),
+    vec2(-0.5, 0.5)
+);
+
+void main() {
+    gl_Position = vec4(positions[gl_VertexIndex], 0.0, 1.0);
+}
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div><p>It defines an array “positions” of 2D vectors, which represent the coordinates of three vertices. This shader will be used to draw the triangle on the screen using the provided vertex positions.</p>
+<hr>
+<h1 id="ShaderCompile">Shaders Are Done, Now Let’s Compile!<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#ShaderCompile" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>and that’s the last time we’ll have to touch those before we get a Triangle on-screen, but that’s a ways off still. First we now need to utilize our VulkanSDK to run <code>glslc</code>. In the video he uses this script which works just fine in <code>bash</code>, so from <code>fish</code> I’ve just been launching a <code>bash</code> shell to run this <code>src/glslc.sh</code> file:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token shebang important">#!/bin/bash</span>
+
+<span class="token variable">$VULKAN_SDK</span>/bin/glslc shaders/simple_shader.vert -o shaders/simple_shader.vert.spv
+<span class="token variable">$VULKAN_SDK</span>/bin/glslc shaders/simple_shader.frag -o shaders/simple_shader.frag.spv
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>Make sure that you change the mode of our file for executuion with  <code>chmod</code>:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token function">chmod</span> +x src/glslc.sh
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>and finally</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash">./src/glslc.sh
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>should run do the thing</p>
+<p>It won’t tell you if you got it right, but <code>glslc</code> complain nicely if something didn’t go right.</p>
+<p>if you’re using <code>fish</code> you may as well just go to <code>BASH</code> like I did:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token function">bash</span> ./src/glslc.sh
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>or</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token function">bash</span>
+./src/glslc.sh
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>to get a full shell environment up. If your environment variables aren’t working, make sure you’ve logged out of your user session since adding anything to your <code>~/.bashrc</code> or <code>~/.bash_profile</code>. If it really isn’t working just use the commands from the script as a guide to work through the process manually.</p>
+<p>I didn’t go as far as incorporating the shader compilation step into the <code>CMakeLists.txt</code> file’s <code>copy_assets</code> function just yet, but that’s still something I will go on and do. I’ll update this post if/when it happens.</p>
+<h1 id="Triangle">Toward The TRIANGLE!<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Triangle" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>The GLFW window we wrote is about to get Vulkanized, and this page is going to start looking like <a href="https://github.com/Jmac217/Vulkan-Starter-Engine">GitHub</a>!</p>
+<p>As Brendan Stated in the <a href="https://youtu.be/LYKlEIzGmW4?t=94">tutorial</a>, there’s a lot of extra boilerplate that gets in the way and does not need to be thought about at this stage. By following the tutorial beyond the point of this triangle example</p>
+<p>There are 4 files to download from the tutorial and at very least the namespace will need to be changed to <code>jde</code> in those downloads. It’s not proper etiquate to link directly to those files, and you should watch those parts of the videos anyway to really see what to change in the files.</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=LYKlEIzGmW4&amp;t=94s">lve_device.cpp &amp; lve_device.hpp</a></li>
+<li><a href="https://www.youtube.com/watch?v=IUYH74MqxOA&amp;t=194s">lve_swap_chain.cpp &amp; lve_swap_chain.hpp</a></li>
+</ul>
+<p>We’re jumping right to the Tringle BTW, these next couple of files are the only things we still need!</p>
+<h1 id="FirstTriangleHpp">The expanded <code>first_app.hpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#FirstTriangleHpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_window.hpp"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_pipeline.hpp"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_device.hpp"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_swap_chain.hpp"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;memory&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector&gt;</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-class">class</span> <span class="token class-name">FirstApp</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-public">public</span><span class="token operator">:</span>
+        <span class="token keyword keyword-static">static</span> <span class="token keyword keyword-constexpr">constexpr</span> <span class="token keyword keyword-int">int</span> WIDTH <span class="token operator">=</span> <span class="token number">800</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-static">static</span> <span class="token keyword keyword-constexpr">constexpr</span> <span class="token keyword keyword-int">int</span> HEIGHT <span class="token operator">=</span> <span class="token number">600</span><span class="token punctuation">;</span>
+        
+        <span class="token function">FirstApp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">~</span><span class="token function">FirstApp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">FirstApp</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> FirstApp <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+        FirstApp <span class="token operator">&amp;</span><span class="token keyword keyword-operator">operator</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> FirstApp <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+        
+        <span class="token keyword keyword-void">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-private">private</span><span class="token operator">:</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">createPipelineLayout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">createPipeline</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">createCommandBuffers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">drawFrame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        JdeWindow jdeWindow<span class="token punctuation">{</span>WIDTH<span class="token punctuation">,</span> HEIGHT<span class="token punctuation">,</span> <span class="token string">"Hello Vulkan!"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        JdeDevice jdeDevice<span class="token punctuation">{</span>jdeWindow<span class="token punctuation">}</span><span class="token punctuation">;</span>
+        JdeSwapChain jdeSwapChain<span class="token punctuation">{</span>jdeDevice<span class="token punctuation">,</span> jdeWindow<span class="token punctuation">.</span><span class="token function">getExtent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        std<span class="token double-colon punctuation">::</span>unique_ptr<span class="token operator">&lt;</span>JdePipeline<span class="token operator">&gt;</span> jdePipeline<span class="token punctuation">;</span>
+        VkPipelineLayout pipelineLayout<span class="token punctuation">;</span>
+        std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span>VkCommandBuffer<span class="token operator">&gt;</span> commandBuffers<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>Our <code>FirstApp</code> class has a <em>default</em> <code>constructor</code> and <code>destructor</code> and a still similar <code>run()</code> method.</p>
+<ul>
+<li>
+<p>The <code>constructor</code> now creates a <em>pipeline layout</em>, pipeline, and <em>command buffers</em>.</p>
+</li>
+<li>
+<p>The <code>destructor</code> now destroys the <em>pipeline layout</em>.</p>
+</li>
+<li>
+<p>The <code>run()</code> method is still our main loop in the application, it polls events and now calls the <code>drawFrame</code> method.</p>
+</li>
+<li>
+<p>The <code>createPipelineLayout</code> method creates a <em>pipeline layout</em> for the pipeline. It sets the layout count and push constant range count to 0 and creates the <em>pipeline layout</em>.</p>
+</li>
+<li>
+<p>The <code>createPipeline</code> method creates a pipeline and assigns the <em>render pass</em> and <em>pipeline layout</em> to it.</p>
+</li>
+<li>
+<p>The <code>createCommandBuffers</code> method resizes the <em>command buffers</em> vector to the size of the <em>swap chain</em> images. It allocates <em>command buffers</em> and begins recording them. It sets up a <em>render pass</em>, clears the color and depth values, and binds the pipeline and draws a triangle.</p>
+</li>
+<li>
+<p>The <code>drawFrame</code> method acquires an image from the <em>swap chain</em>, and begins and ends the command buffer while submitting to the mailbox queue.</p>
+</li>
+</ul>
+<p>and the accompanying translation unit is rather large:</p>
+<h1 id="FirstTriangleCpp"><code>first_app.cpp</code> Just Got A Lot Bigger!<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#FirstTriangleCpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"first_app.hpp"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdexcept&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;array&gt;</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token function">FirstApp</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">createPipelineLayout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">createPipeline</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">createCommandBuffers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token operator">~</span><span class="token function">FirstApp</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">vkDestroyPipelineLayout</span><span class="token punctuation">(</span>jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> pipelineLayout<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>jdeWindow<span class="token punctuation">.</span><span class="token function">shouldClose</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">glfwPollEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">drawFrame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token function">createPipelineLayout</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        VkPipelineLayoutCreateInfo pipelineLayoutInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        pipelineLayoutInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO<span class="token punctuation">;</span>
+        pipelineLayoutInfo<span class="token punctuation">.</span>setLayoutCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        pipelineLayoutInfo<span class="token punctuation">.</span>pSetLayouts <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+        pipelineLayoutInfo<span class="token punctuation">.</span>pushConstantRangeCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        pipelineLayoutInfo<span class="token punctuation">.</span>pPushConstantRanges <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token function">vkCreatePipelineLayout</span><span class="token punctuation">(</span>jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>pipelineLayoutInfo<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>pipelineLayout<span class="token punctuation">)</span> <span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to create pipeline layout!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token function">createPipeline</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword keyword-auto">auto</span> pipelineConfig <span class="token operator">=</span> <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token function">defaultPipelineConfigInfo</span><span class="token punctuation">(</span>jdeSwapChain<span class="token punctuation">.</span><span class="token function">width</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> jdeSwapChain<span class="token punctuation">.</span><span class="token function">height</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pipelineConfig<span class="token punctuation">.</span>renderPass <span class="token operator">=</span> jdeSwapChain<span class="token punctuation">.</span><span class="token function">getRenderPass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pipelineConfig<span class="token punctuation">.</span>pipelineLayout <span class="token operator">=</span> pipelineLayout<span class="token punctuation">;</span>
+        jdePipeline <span class="token operator">=</span> std<span class="token double-colon punctuation">::</span><span class="token generic-function"><span class="token function">make_unique</span><span class="token generic class-name"><span class="token operator">&lt;</span>JdePipeline<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>
+            jdeDevice<span class="token punctuation">,</span> 
+            <span class="token string">"src/shaders/simple_shader.vert.spv"</span><span class="token punctuation">,</span> 
+            <span class="token string">"src/shaders/simple_shader.frag.spv"</span><span class="token punctuation">,</span> 
+            pipelineConfig<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token function">createCommandBuffers</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        commandBuffers<span class="token punctuation">.</span><span class="token function">resize</span><span class="token punctuation">(</span>jdeSwapChain<span class="token punctuation">.</span><span class="token function">imageCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        VkCommandBufferAllocateInfo allocInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        allocInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO<span class="token punctuation">;</span>
+        allocInfo<span class="token punctuation">.</span>level <span class="token operator">=</span> VK_COMMAND_BUFFER_LEVEL_PRIMARY<span class="token punctuation">;</span>
+        allocInfo<span class="token punctuation">.</span>commandPool <span class="token operator">=</span> jdeDevice<span class="token punctuation">.</span><span class="token function">getCommandPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        allocInfo<span class="token punctuation">.</span>commandBufferCount <span class="token operator">=</span> <span class="token generic-function"><span class="token function">static_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword keyword-uint32_t">uint32_t</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>commandBuffers<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-if">if</span><span class="token punctuation">(</span><span class="token function">vkAllocateCommandBuffers</span><span class="token punctuation">(</span>jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>allocInfo<span class="token punctuation">,</span> commandBuffers<span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to allocate command buffers!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword keyword-for">for</span> <span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> commandBuffers<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            VkCommandBufferBeginInfo beginInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+            beginInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO<span class="token punctuation">;</span>
+
+            <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token function">vkBeginCommandBuffer</span><span class="token punctuation">(</span>commandBuffers<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>beginInfo<span class="token punctuation">)</span> <span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to begin recording command buffers!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            VkRenderPassBeginInfo renderPassInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+            renderPassInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO<span class="token punctuation">;</span>
+            renderPassInfo<span class="token punctuation">.</span>renderPass <span class="token operator">=</span> jdeSwapChain<span class="token punctuation">.</span><span class="token function">getRenderPass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            renderPassInfo<span class="token punctuation">.</span>framebuffer <span class="token operator">=</span> jdeSwapChain<span class="token punctuation">.</span><span class="token function">getFrameBuffer</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            renderPassInfo<span class="token punctuation">.</span>renderArea<span class="token punctuation">.</span>offset <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+            renderPassInfo<span class="token punctuation">.</span>renderArea<span class="token punctuation">.</span>extent <span class="token operator">=</span> jdeSwapChain<span class="token punctuation">.</span><span class="token function">getSwapChainExtent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            std<span class="token double-colon punctuation">::</span>array<span class="token operator">&lt;</span>VkClearValue<span class="token punctuation">,</span> <span class="token number">2</span><span class="token operator">&gt;</span> clearValues<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+            clearValues<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>color <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">0.2f</span><span class="token punctuation">,</span> <span class="token number">0.5f</span><span class="token punctuation">,</span> <span class="token number">0.9f</span><span class="token punctuation">,</span> <span class="token number">1.0f</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+            clearValues<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>depthStencil <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1.0f</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+            renderPassInfo<span class="token punctuation">.</span>clearValueCount <span class="token operator">=</span> <span class="token generic-function"><span class="token function">static_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword keyword-uint32_t">uint32_t</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>clearValues<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            renderPassInfo<span class="token punctuation">.</span>pClearValues <span class="token operator">=</span> clearValues<span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token function">vkCmdBeginRenderPass</span><span class="token punctuation">(</span>commandBuffers<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>renderPassInfo<span class="token punctuation">,</span> VK_SUBPASS_CONTENTS_INLINE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            jdePipeline<span class="token operator">-&gt;</span><span class="token function">bind</span><span class="token punctuation">(</span>commandBuffers<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">vkCmdDraw</span><span class="token punctuation">(</span>commandBuffers<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token function">vkCmdEndRenderPass</span><span class="token punctuation">(</span>commandBuffers<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token function">vkEndCommandBuffer</span><span class="token punctuation">(</span>commandBuffers<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to record command buffer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">FirstApp</span><span class="token double-colon punctuation">::</span><span class="token function">drawFrame</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword keyword-uint32_t">uint32_t</span> imageIndex<span class="token punctuation">;</span>
+        <span class="token keyword keyword-auto">auto</span> result <span class="token operator">=</span> jdeSwapChain<span class="token punctuation">.</span><span class="token function">acquireNextImage</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>imageIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>result <span class="token operator">!=</span> VK_SUCCESS <span class="token operator">&amp;&amp;</span> result <span class="token operator">!=</span> VK_SUBOPTIMAL_KHR<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"imageIndex failed to acquire swap chain image!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        result <span class="token operator">=</span> jdeSwapChain<span class="token punctuation">.</span><span class="token function">submitCommandBuffers</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>commandBuffers<span class="token punctuation">[</span>imageIndex<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>imageIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>result <span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"result failed to acquire swap chain image!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>FirstApp <code>constructor</code>:</p>
+<ul>
+<li>creates a <em>pipeline layout</em></li>
+<li>creates a pipeline</li>
+<li>creates <em>command buffers</em></li>
+</ul>
+<p>FirstApp <code>destructor</code>:</p>
+<ul>
+<li>destroys the <em>pipeline layout</em></li>
+</ul>
+<p><code>FirstApp::run()</code>:</p>
+<ul>
+<li>enters a loop that polls events and calls the <code>drawFrame</code> method as long as the window is not closed</li>
+</ul>
+<p><code>FirstApp::createPipelineLayout()</code>:</p>
+<ul>
+<li>creates a <em>pipeline layout</em> with no set layouts or push constant ranges</li>
+</ul>
+<p><code>FirstApp::createPipeline()</code>:</p>
+<ul>
+<li>creates a pipeline with the render pass and <em>pipeline layout</em> from the <code>JdeSwapChain</code> and <code>JdePipeline</code> classes, and assigns it to the <code>jdePipeline</code> <em>member variable</em></li>
+</ul>
+<p><code>FirstApp::createCommandBuffers()</code>:</p>
+<ul>
+<li>resizes the <em>command buffers</em> vector to the number of images in the <em>swap chain</em>
+allocates <em>command buffers</em> and begins recording them</li>
+<li>sets up a render pass, clears the color and depth values, and binds the pipeline and draws a triangle</li>
+</ul>
+<p><code>FirstApp::drawFrame()</code>:
+acquires an image from the <em>swap chain</em>
+begins and ends the <em>command buffer</em> and submits it to the mailbox queue</p>
+<h1 id="PipelineHpp">Vulkan Graphics Pipeline Configuration<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#PipelineHpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<h1 id="jde_pipelinehpp"><code>jde_pipeline.hpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#jde_pipelinehpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_device.hpp"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector&gt;</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token keyword keyword-struct">struct</span> <span class="token class-name">PipelineConfigInfo</span> <span class="token punctuation">{</span>
+        VkViewport viewport<span class="token punctuation">;</span>
+        VkRect2D scissor<span class="token punctuation">;</span>
+        VkPipelineViewportStateCreateInfo viewportInfo<span class="token punctuation">;</span>
+        VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo<span class="token punctuation">;</span>
+        VkPipelineRasterizationStateCreateInfo rasterizationInfo<span class="token punctuation">;</span>
+        VkPipelineMultisampleStateCreateInfo multisampleInfo<span class="token punctuation">;</span>
+        VkPipelineColorBlendAttachmentState colorBlendAttachment<span class="token punctuation">;</span>
+        VkPipelineColorBlendStateCreateInfo colorBlendInfo<span class="token punctuation">;</span>
+        VkPipelineDepthStencilStateCreateInfo depthStencilInfo<span class="token punctuation">;</span>
+        VkPipelineLayout pipelineLayout <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+        VkRenderPass renderPass <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-uint32_t">uint32_t</span> subpass <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-class">class</span> <span class="token class-name">JdePipeline</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-public">public</span><span class="token operator">:</span>
+        <span class="token function">JdePipeline</span><span class="token punctuation">(</span>
+            JdeDevice <span class="token operator">&amp;</span>device<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> vertFilepath<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> fragFilepath<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> PipelineConfigInfo<span class="token operator">&amp;</span> configInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">~</span><span class="token function">JdePipeline</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">JdePipeline</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> JdePipeline<span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-void">void</span> <span class="token keyword keyword-operator">operator</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> JdePipeline<span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-void">void</span> <span class="token function">bind</span><span class="token punctuation">(</span>VkCommandBuffer commandBuffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-static">static</span> PipelineConfigInfo <span class="token function">defaultPipelineConfigInfo</span><span class="token punctuation">(</span><span class="token keyword keyword-uint32_t">uint32_t</span> width<span class="token punctuation">,</span> <span class="token keyword keyword-uint32_t">uint32_t</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-private">private</span><span class="token operator">:</span>
+        
+        <span class="token keyword keyword-static">static</span> std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword keyword-char">char</span><span class="token operator">&gt;</span> <span class="token function">readFile</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> filepath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">createGraphicsPipeline</span><span class="token punctuation">(</span>
+            <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> vertFilepath<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> fragFilepath<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> PipelineConfigInfo<span class="token operator">&amp;</span> configInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-void">void</span> <span class="token function">createShaderModule</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword keyword-char">char</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span> code<span class="token punctuation">,</span> VkShaderModule<span class="token operator">*</span> shaderModule<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// implicitly will outlive any class that depends on it. "aggregation"</span>
+        JdeDevice<span class="token operator">&amp;</span> jdeDevice<span class="token punctuation">;</span>
+        VkPipeline graphicsPipeline<span class="token punctuation">;</span>
+        VkShaderModule vertShaderModule<span class="token punctuation">;</span>
+        VkShaderModule fragShaderModule<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>This code is defining a class called <code>JdePipeline</code> in the <code>jde</code> namespace. The class has a <code>constructor</code>, <code>destructor</code>, and a function called <code>bind()</code>.</p>
+<ul>
+<li>
+<p>The <code>constructor</code> takes in a <code>JdeDevice</code> object, the file paths for a <code>vertex shader</code> and <code>fragment shader</code>, and a <code>PipelineConfigInfo</code> struct.</p>
+</li>
+<li>
+<p>The <code>destructor</code> will clean up the <em>pipeline</em> and <em>shader modules</em>. The <code>bind()</code> function is used to <em>bind</em> the <em>pipeline</em> to a <em>command buffer</em>.</p>
+</li>
+<li>
+<p>The <code>JdePipeline</code> class also has a static function called <code>defaultPipelineConfigInfo()</code> that returns a <code>PipelineConfigInfo</code> struct with default values for its member variables.</p>
+</li>
+<li>
+<p>The class has a <em>private function</em> called <code>createGraphicsPipeline()</code> that creates the <em>pipeline</em> using the provided configuration and <em>shaders</em>.</p>
+</li>
+<li>
+<p>It also has a private function called <code>createShaderModule()</code> that creates a shader module from the provided code.</p>
+</li>
+</ul>
+<p>The class has a member variable <code>graphicsPipeline</code> of type <code>VkPipeline</code>, which will store the <em>pipeline</em> object.</p>
+<ul>
+<li>
+<p>It also has two <em>member variables</em> of type <code>VkShaderModule</code>, which will store the <code>vertex shader</code> and <code>fragment shader</code> modules.</p>
+</li>
+<li>
+<p>The class also has a reference to the <code>JdeDevice</code> object, which is passed in through the <code>constructor</code> and is used to interact with the device throughout the lifetime of the <em>pipeline</em>.</p>
+</li>
+</ul>
+<p>and the massive list of groupings of definitions lie ahead:</p>
+<h1 id="PipelineCpp"><code>jde_pipeline.cpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#PipelineCpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_pipeline.hpp"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fstream&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdexcept&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cassert&gt;</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token function">JdePipeline</span><span class="token punctuation">(</span>
+            JdeDevice <span class="token operator">&amp;</span>device<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> vertFilepath<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> fragFilepath<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-const">const</span> PipelineConfigInfo<span class="token operator">&amp;</span> configInfo<span class="token punctuation">)</span><span class="token operator">:</span>
+            jdeDevice<span class="token punctuation">{</span>device<span class="token punctuation">}</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">createGraphicsPipeline</span><span class="token punctuation">(</span>vertFilepath<span class="token punctuation">,</span> fragFilepath<span class="token punctuation">,</span> configInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token operator">~</span><span class="token function">JdePipeline</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">vkDestroyShaderModule</span><span class="token punctuation">(</span>jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vertShaderModule<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">vkDestroyShaderModule</span><span class="token punctuation">(</span>jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> fragShaderModule<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">vkDestroyPipeline</span><span class="token punctuation">(</span>jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> graphicsPipeline<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword keyword-char">char</span><span class="token operator">&gt;</span> <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token function">readFile</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> filepath<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        std<span class="token double-colon punctuation">::</span>ifstream file<span class="token punctuation">{</span>filepath<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>ios<span class="token double-colon punctuation">::</span>ate <span class="token operator">|</span> std<span class="token double-colon punctuation">::</span>ios<span class="token double-colon punctuation">::</span>binary<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>file<span class="token punctuation">.</span><span class="token function">is_open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to open file: "</span> <span class="token operator">+</span> filepath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        size_t fileSize <span class="token operator">=</span> <span class="token generic-function"><span class="token function">static_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span>size_t<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>file<span class="token punctuation">.</span><span class="token function">tellg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword keyword-char">char</span><span class="token operator">&gt;</span> <span class="token function">buffer</span><span class="token punctuation">(</span>fileSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        file<span class="token punctuation">.</span><span class="token function">seekg</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        file<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> fileSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        file<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-return">return</span> buffer<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token function">createGraphicsPipeline</span><span class="token punctuation">(</span>
+        <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> vertFilepath<span class="token punctuation">,</span> 
+        <span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">&amp;</span> fragFilepath<span class="token punctuation">,</span> 
+        <span class="token keyword keyword-const">const</span> PipelineConfigInfo<span class="token operator">&amp;</span> configInfo<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span>configInfo<span class="token punctuation">.</span>pipelineLayout <span class="token operator">!=</span> VK_NULL_HANDLE <span class="token operator">&amp;&amp;</span>
+        <span class="token string">"Cannot create graphics pipeline:: no pipelineLayout provided in configInfo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span>configInfo<span class="token punctuation">.</span>renderPass <span class="token operator">!=</span> VK_NULL_HANDLE <span class="token operator">&amp;&amp;</span>
+        <span class="token string">"Cannot create graphics pipeline:: no pipelineLayout provided in configInfo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-auto">auto</span> vertCode <span class="token operator">=</span> <span class="token function">readFile</span><span class="token punctuation">(</span>vertFilepath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-auto">auto</span> fragCode <span class="token operator">=</span> <span class="token function">readFile</span><span class="token punctuation">(</span>fragFilepath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">createShaderModule</span><span class="token punctuation">(</span>vertCode<span class="token punctuation">,</span> <span class="token operator">&amp;</span>vertShaderModule<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">createShaderModule</span><span class="token punctuation">(</span>fragCode<span class="token punctuation">,</span> <span class="token operator">&amp;</span>fragShaderModule<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        VkPipelineShaderStageCreateInfo shaderStages<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO<span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>stage <span class="token operator">=</span> VK_SHADER_STAGE_VERTEX_BIT<span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token keyword keyword-module">module</span> <span class="token operator">=</span> vertShaderModule<span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>pName <span class="token operator">=</span> <span class="token string">"main"</span><span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>flags <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>pNext <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>pSpecializationInfo <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+
+        shaderStages<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO<span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>stage <span class="token operator">=</span> VK_SHADER_STAGE_FRAGMENT_BIT<span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token keyword keyword-module">module</span> <span class="token operator">=</span> fragShaderModule<span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>pName <span class="token operator">=</span> <span class="token string">"main"</span><span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>flags <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>pNext <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+        shaderStages<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>pSpecializationInfo <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+
+        VkPipelineVertexInputStateCreateInfo vertexInputInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        vertexInputInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO<span class="token punctuation">;</span>
+        vertexInputInfo<span class="token punctuation">.</span>vertexAttributeDescriptionCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        vertexInputInfo<span class="token punctuation">.</span>vertexBindingDescriptionCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        vertexInputInfo<span class="token punctuation">.</span>pVertexAttributeDescriptions <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+        vertexInputInfo<span class="token punctuation">.</span>pVertexBindingDescriptions <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+
+        VkPipelineViewportStateCreateInfo viewportInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        viewportInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO<span class="token punctuation">;</span>
+        viewportInfo<span class="token punctuation">.</span>viewportCount <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        viewportInfo<span class="token punctuation">.</span>pViewports <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>viewport<span class="token punctuation">;</span>
+        viewportInfo<span class="token punctuation">.</span>scissorCount <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        viewportInfo<span class="token punctuation">.</span>pScissors <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>scissor<span class="token punctuation">;</span>
+
+        VkGraphicsPipelineCreateInfo pipelineInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>stageCount <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pStages <span class="token operator">=</span> shaderStages<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pVertexInputState <span class="token operator">=</span> <span class="token operator">&amp;</span>vertexInputInfo<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pInputAssemblyState <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>inputAssemblyInfo<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pViewportState <span class="token operator">=</span> <span class="token operator">&amp;</span>viewportInfo<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pRasterizationState <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pMultisampleState <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">;</span>
+
+        pipelineInfo<span class="token punctuation">.</span>pColorBlendState <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pDepthStencilState <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>pDynamicState <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>
+
+        pipelineInfo<span class="token punctuation">.</span>layout <span class="token operator">=</span> configInfo<span class="token punctuation">.</span>pipelineLayout<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>renderPass <span class="token operator">=</span> configInfo<span class="token punctuation">.</span>renderPass<span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>subpass <span class="token operator">=</span> configInfo<span class="token punctuation">.</span>subpass<span class="token punctuation">;</span>
+
+        pipelineInfo<span class="token punctuation">.</span>basePipelineIndex <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+        pipelineInfo<span class="token punctuation">.</span>basePipelineHandle <span class="token operator">=</span> VK_NULL_HANDLE<span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token function">vkCreateGraphicsPipelines</span><span class="token punctuation">(</span>
+            jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> 
+            VK_NULL_HANDLE<span class="token punctuation">,</span> 
+            <span class="token number">1</span><span class="token punctuation">,</span> 
+            <span class="token operator">&amp;</span>pipelineInfo<span class="token punctuation">,</span> 
+            <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> 
+            <span class="token operator">&amp;</span>graphicsPipeline<span class="token punctuation">)</span> <span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to create graphics pipeline"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token function">createShaderModule</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword keyword-char">char</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span> code<span class="token punctuation">,</span> VkShaderModule<span class="token operator">*</span> shaderModule<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        VkShaderModuleCreateInfo createInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        createInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO<span class="token punctuation">;</span>
+        createInfo<span class="token punctuation">.</span>codeSize <span class="token operator">=</span> code<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        createInfo<span class="token punctuation">.</span>pCode <span class="token operator">=</span> <span class="token generic-function"><span class="token function">reinterpret_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword keyword-const">const</span> <span class="token keyword keyword-uint32_t">uint32_t</span><span class="token operator">*</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>code<span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token function">vkCreateShaderModule</span><span class="token punctuation">(</span>jdeDevice<span class="token punctuation">.</span><span class="token function">device</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>createInfo<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> shaderModule<span class="token punctuation">)</span> <span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to create shader module"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token function">bind</span><span class="token punctuation">(</span>VkCommandBuffer commandBuffer<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">vkCmdBindPipeline</span><span class="token punctuation">(</span>commandBuffer<span class="token punctuation">,</span> VK_PIPELINE_BIND_POINT_GRAPHICS<span class="token punctuation">,</span> graphicsPipeline<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    PipelineConfigInfo <span class="token class-name">JdePipeline</span><span class="token double-colon punctuation">::</span><span class="token function">defaultPipelineConfigInfo</span><span class="token punctuation">(</span><span class="token keyword keyword-uint32_t">uint32_t</span> width<span class="token punctuation">,</span> <span class="token keyword keyword-uint32_t">uint32_t</span> height<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        PipelineConfigInfo configInfo<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        configInfo<span class="token punctuation">.</span>inputAssemblyInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>inputAssemblyInfo<span class="token punctuation">.</span>topology <span class="token operator">=</span> VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>inputAssemblyInfo<span class="token punctuation">.</span>primitiveRestartEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+
+        configInfo<span class="token punctuation">.</span>viewport<span class="token punctuation">.</span>x <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>viewport<span class="token punctuation">.</span>y <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>viewport<span class="token punctuation">.</span>width <span class="token operator">=</span> <span class="token generic-function"><span class="token function">static_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword keyword-float">float</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>width<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>viewport<span class="token punctuation">.</span>height <span class="token operator">=</span> <span class="token generic-function"><span class="token function">static_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword keyword-float">float</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>viewport<span class="token punctuation">.</span>minDepth <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>viewport<span class="token punctuation">.</span>maxDepth <span class="token operator">=</span> <span class="token number">1.0f</span><span class="token punctuation">;</span>
+
+        configInfo<span class="token punctuation">.</span>scissor<span class="token punctuation">.</span>offset <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>scissor<span class="token punctuation">.</span>extent <span class="token operator">=</span> <span class="token punctuation">{</span>width<span class="token punctuation">,</span> height<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>depthClampEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>rasterizerDiscardEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>polygonMode <span class="token operator">=</span> VK_POLYGON_MODE_FILL<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>lineWidth <span class="token operator">=</span> <span class="token number">1.0f</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>cullMode <span class="token operator">=</span> VK_CULL_MODE_NONE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>frontFace <span class="token operator">=</span> VK_FRONT_FACE_CLOCKWISE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>depthBiasEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>depthBiasConstantFactor <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>depthBiasClamp <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>           <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>rasterizationInfo<span class="token punctuation">.</span>depthBiasSlopeFactor <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>     <span class="token comment">// Optional</span>
+
+        configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">.</span>sampleShadingEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">.</span>rasterizationSamples <span class="token operator">=</span> VK_SAMPLE_COUNT_1_BIT<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">.</span>minSampleShading <span class="token operator">=</span> <span class="token number">1.0f</span><span class="token punctuation">;</span>           <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">.</span>pSampleMask <span class="token operator">=</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">;</span>             <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">.</span>alphaToCoverageEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>multisampleInfo<span class="token punctuation">.</span>alphaToOneEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>       <span class="token comment">// Optional</span>
+
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>colorWriteMask <span class="token operator">=</span>
+            VK_COLOR_COMPONENT_R_BIT <span class="token operator">|</span> VK_COLOR_COMPONENT_G_BIT <span class="token operator">|</span> VK_COLOR_COMPONENT_B_BIT <span class="token operator">|</span>
+            VK_COLOR_COMPONENT_A_BIT<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>blendEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>srcColorBlendFactor <span class="token operator">=</span> VK_BLEND_FACTOR_ONE<span class="token punctuation">;</span>   <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>dstColorBlendFactor <span class="token operator">=</span> VK_BLEND_FACTOR_ZERO<span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>colorBlendOp <span class="token operator">=</span> VK_BLEND_OP_ADD<span class="token punctuation">;</span>              <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>srcAlphaBlendFactor <span class="token operator">=</span> VK_BLEND_FACTOR_ONE<span class="token punctuation">;</span>   <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>dstAlphaBlendFactor <span class="token operator">=</span> VK_BLEND_FACTOR_ZERO<span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">.</span>alphaBlendOp <span class="token operator">=</span> VK_BLEND_OP_ADD<span class="token punctuation">;</span>              <span class="token comment">// Optional</span>
+
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>logicOpEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>logicOp <span class="token operator">=</span> VK_LOGIC_OP_COPY<span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>attachmentCount <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>pAttachments <span class="token operator">=</span> <span class="token operator">&amp;</span>configInfo<span class="token punctuation">.</span>colorBlendAttachment<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>blendConstants<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>blendConstants<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>blendConstants<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>colorBlendInfo<span class="token punctuation">.</span>blendConstants<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>sType <span class="token operator">=</span> VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>depthTestEnable <span class="token operator">=</span> VK_TRUE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>depthWriteEnable <span class="token operator">=</span> VK_TRUE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>depthCompareOp <span class="token operator">=</span> VK_COMPARE_OP_LESS<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>depthBoundsTestEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>minDepthBounds <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>maxDepthBounds <span class="token operator">=</span> <span class="token number">1.0f</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>stencilTestEnable <span class="token operator">=</span> VK_FALSE<span class="token punctuation">;</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>front <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>  <span class="token comment">// Optional</span>
+        configInfo<span class="token punctuation">.</span>depthStencilInfo<span class="token punctuation">.</span>back <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>   <span class="token comment">// Optional</span>
+
+        <span class="token keyword keyword-return">return</span> configInfo<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>The <code>JdePipeline</code> class provides an implementation for creating a <em>graphics pipeline</em> in a Vulkan application.</p>
+<ul>
+<li>The constructor takes in a <code>JdeDevice</code> and file paths for <code>vertex shader</code> and <code>fragment shader</code>, as well as a <code>PipelineConfigInfo</code> struct containing information about the pipeline layout and render pass.</li>
+<li>The class uses the provided file paths to create and load a vertex and fragment shader module.</li>
+<li>It then uses the provided <code>PipelineConfigInfo</code> and the loaded shaders to create the <em>graphics pipeline</em>.</li>
+<li>The <code>destructor</code> destroys the shader modules and the <em>pipeline</em>.</li>
+<li>The <code>readFile</code> method reads a file and returns the contents as a vector of chars.</li>
+<li>The <code>createShaderModule</code> method creates a shader module from a vector of chars.</li>
+<li>The <code>createGraphicsPipeline</code> method sets up the <em>pipeline</em>, including specifying the <em>shaders</em>, <em>vertex input</em>, and <em>viewport information</em>.</li>
+<li><code>defaultPipelineConfigInfo</code> is a helper method that returns a <code>PipelineConfigInfo</code> struct with default values for its fields. The method takes in the <code>width</code> and <code>height</code> of the <code>viewport</code>, and sets the <code>viewport</code> and <code>scissor</code> fields accordingly. It also sets default values for the <code>viewportInfo</code>, <code>inputAssemblyInfo</code>, <code>rasterizationInfo</code>, <code>multisampleInfo</code>, <code>colorBlendAttachment</code>, <code>colorBlendInfo</code>, and <code>depthStencilInfo</code> fields.</li>
+<li>The <em>pipeline layout</em> and <em>render pass</em> fields are initialized to <code>nullptr</code>, and the <code>subpass</code> field is initialized to <code>0</code>.</li>
+<li><code>createGraphicsPipeline</code> is the method responsible for creating the <em>graphics pipeline</em>. It takes in the filepaths for the <code>vertex shader</code> and <code>fragment shaders</code>, and a <code>PipelineConfigInfo</code> struct that contains the configuration for the <em>pipeline</em>. The method starts by reading the <code>vertex shader</code> and <code>fragment shaders</code> from the filepaths, and creating shader modules from the code.</li>
+<li>It then sets up the <code>shaderStages</code> array with the <code>vertex shader</code> and <code>fragment shader</code> modules, and sets up the <code>vertexInputInfo</code>, <code>viewportInfo</code>, and <code>rasterizationInfo</code> structs with the appropriate values. The <code>multisampleInfo</code>, <code>colorBlendAttachment</code>, <code>colorBlendInfo</code>, and <code>depthStencilInfo</code> structs are also set up with default values.</li>
+<li>It then creates the <em>graphics pipeline</em> by calling <code>vkCreateGraphicsPipelines</code> with the appropriate parameters. It also <em>binds</em> the <em>pipeline layout</em> and <em>render pass</em> to the <em>pipeline</em>.</li>
+</ul>
+<hr>
+<h1 id="WindowHpp">A New And Improved <code>jde_window.hpp</code> Window Class<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#WindowHpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GLFW_INCLUDE_VULKAN</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;GLFW/glfw3.h&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string&gt;</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+    
+    <span class="token keyword keyword-class">class</span> <span class="token class-name">JdeWindow</span> <span class="token punctuation">{</span>
+        <span class="token keyword keyword-public">public</span><span class="token operator">:</span>
+        <span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> w<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> h<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">~</span><span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> JdeWindow <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+        JdeWindow <span class="token operator">&amp;</span><span class="token keyword keyword-operator">operator</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword keyword-const">const</span> JdeWindow <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword keyword-delete">delete</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-bool">bool</span> <span class="token function">shouldClose</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword keyword-return">return</span> <span class="token function">glfwWindowShouldClose</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        
+        VkExtent2D <span class="token function">getExtent</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword keyword-return">return</span> <span class="token punctuation">{</span>
+                <span class="token generic-function"><span class="token function">static_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword keyword-uint32_t">uint32_t</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>width<span class="token punctuation">)</span><span class="token punctuation">,</span> 
+                <span class="token generic-function"><span class="token function">static_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword keyword-uint32_t">uint32_t</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span>height<span class="token punctuation">)</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword keyword-void">void</span> <span class="token function">createWindowSurface</span><span class="token punctuation">(</span>VkInstance instance<span class="token punctuation">,</span> VkSurfaceKHR <span class="token operator">*</span>surface<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-private">private</span><span class="token operator">:</span>
+        <span class="token keyword keyword-void">void</span> <span class="token function">initWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-const">const</span> <span class="token keyword keyword-int">int</span> width<span class="token punctuation">;</span>
+        <span class="token keyword keyword-const">const</span> <span class="token keyword keyword-int">int</span> height<span class="token punctuation">;</span>
+
+        std<span class="token double-colon punctuation">::</span>string windowName<span class="token punctuation">;</span>
+        GLFWwindow <span class="token operator">*</span>window<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><ul>
+<li>We define a class called <code>JdeWindow</code> within the <code>jde</code> namespace.</li>
+<li>The <code>JdeWindow</code> class has a constructor that takes in an <em>integer width</em>, an <em>integer height</em> and a <em>string name</em>, it creates a <em>window</em> using <code>GLFW</code> library with the provided <code>width</code>, <code>height</code> and <code>name</code>.</li>
+<li>The <code>destructor</code> destroys the <em>window</em>, and a <em>copy constructor</em> and <em>assignment operator</em> that have been <code>deleted</code> to prevent <em>object copying</em>.</li>
+<li>The <code>shouldClose()</code> public method returns a boolean indicating whether the window has been marked as closed by the user or not, it uses <code>GLFW</code> library to check the status of the <em>window</em>.</li>
+<li>The <code>getExtent</code> public method returns the size of the <em>window</em> as a <code>VkExtent2D</code> struct, which is a struct that contains the width and height of an area.</li>
+<li>There is also a method called <code>createWindowSurface</code> that creates a <em>window surface</em> and assigns it to the provided pointer, it takes in a <code>VkInstance</code> and a pointer to a <code>VkSurfaceKHR</code>.</li>
+<li>The class also has a private method called <code>initWindow()</code> which initializes the window using <code>GLFW</code> library.
+It has several <em>private member variables</em> including <em>width</em>, <em>height</em>, <em>windowName</em> and <em>window</em> which are used to store information about the <em>window</em>.</li>
+</ul>
+<p>and the final piece to our triangular puzzle..!</p>
+<h1 id="WindowCpp"><code>jde_window.cpp</code><a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#WindowCpp" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-cpp"><code class=" language-cpp" data-lang="cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"jde_window.hpp"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdexcept&gt;</span></span>
+
+<span class="token keyword keyword-namespace">namespace</span> jde <span class="token punctuation">{</span>
+
+    <span class="token class-name">JdeWindow</span><span class="token double-colon punctuation">::</span><span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token keyword keyword-int">int</span> w<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> h<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string name<span class="token punctuation">)</span><span class="token operator">:</span>
+        width<span class="token punctuation">{</span>w<span class="token punctuation">}</span><span class="token punctuation">,</span> height<span class="token punctuation">{</span>h<span class="token punctuation">}</span><span class="token punctuation">,</span> windowName<span class="token punctuation">{</span>name<span class="token punctuation">}</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">initWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token class-name">JdeWindow</span><span class="token double-colon punctuation">::</span><span class="token operator">~</span><span class="token function">JdeWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">glfwDestroyWindow</span><span class="token punctuation">(</span>window<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">glfwTerminate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">JdeWindow</span><span class="token double-colon punctuation">::</span><span class="token function">initWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">glfwInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">glfwWindowHint</span><span class="token punctuation">(</span>GLFW_CLIENT_API<span class="token punctuation">,</span> GLFW_NO_API<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">glfwWindowHint</span><span class="token punctuation">(</span>GLFW_RESIZABLE<span class="token punctuation">,</span> GLFW_FALSE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        window <span class="token operator">=</span> <span class="token function">glfwCreateWindow</span><span class="token punctuation">(</span>width<span class="token punctuation">,</span> height<span class="token punctuation">,</span> windowName<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword keyword-void">void</span> <span class="token class-name">JdeWindow</span><span class="token double-colon punctuation">::</span><span class="token function">createWindowSurface</span><span class="token punctuation">(</span>VkInstance instance<span class="token punctuation">,</span> VkSurfaceKHR <span class="token operator">*</span>surface<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span><span class="token function">glfwCreateWindowSurface</span><span class="token punctuation">(</span>instance<span class="token punctuation">,</span> window<span class="token punctuation">,</span> <span class="token keyword keyword-nullptr">nullptr</span><span class="token punctuation">,</span> surface<span class="token punctuation">)</span> <span class="token operator">!=</span> VK_SUCCESS<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"failed to create window surface"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><ul>
+<li>The <code>JdeWindow</code> class creates a <code>GLFW</code> window with a specified <code>width</code>, <code>height</code>, and <code>name</code>. The <code>initWindow()</code> method is called in the <code>constructor</code> to initialize the <code>GLFW</code> library and create the window with the given <code>width</code>, <code>height</code>, and <code>name</code>.</li>
+<li>It has a <code>destructor</code> that destroys the window and terminates <code>GLFW</code>.</li>
+<li>The <code>shouldClose()</code> method returns a boolean indicating whether the window should be closed or not.</li>
+<li>The <code>getExtent()</code> method returns a <code>VkExtent2D</code> struct with the width and height of the window.</li>
+<li>The <code>createWindowSurface</code> method creates a <code>VkSurfaceKHR</code> for the window by calling <code>glfwCreateWindowSurface</code>, passing in the <code>VkInstance</code>, the <code>GLFWwindow</code>, and a <code>nullptr</code> for the allocation callbacks. If the return value is not <code>VK_SUCCESS</code>, it throws a runtime error <em>“failed to create window surface.”</em></li>
+</ul>
+<h1 id="BuildTriangle">And Finally Repeat The Build Steps From Before<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#BuildTriangle" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<p>Run the following <code>CMake</code> command <em>if you’re not using something like Emacs or VS Code</em>:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash">cmake -B ./build -S <span class="token builtin class-name">.</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>and you should see around the same output as:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-txt"><code class=" language-txt" data-lang="txt">-- The C compiler identification is GNU 12.2.1
+-- The CXX compiler identification is GNU 12.2.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Vulkan: /lib64/libvulkan.so (found version "1.3.216") found components: glslc glslangValidator 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/mac/Documents/Projects/C++/Vulkan/build
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><blockquote>
+<p>change into the <em>build directory</em> and issue a <code>make</code> command:</p>
+</blockquote>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash"><span class="token builtin class-name">cd</span> build
+<span class="token function">make</span>
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>or I found that you can run <code>make</code> from anywhere using the <code>-C</code> flag <code>make -C build</code><br>
+in any case you should see something similar to the following output:</p>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-txt"><code class=" language-txt" data-lang="txt">[  0%] Built target copy_assets
+[ 14%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/first_app.cpp.o
+[ 28%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_device.cpp.o
+[ 42%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_pipeline.cpp.o
+[ 57%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_swap_chain.cpp.o
+[ 71%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/jde_window.cpp.o
+[ 85%] Building CXX object CMakeFiles/Vulkan-Starter.dir/src/main.cpp.o
+[100%] Linking CXX executable Vulkan-Starter
+[100%] Built target Vulkan-Starter
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p>the last line says <code>Built target Vulkan-Starter</code> is what matters, that’s our binary!</p>
+<h1 id="Launch">LAUNCH THAT TRIANGLE!<a href="https://jordanielder.com/posts/building-a-triangle-with-vulkan-and-cmake-in-fedora/#Launch" class="hanchor" arialabel="Anchor">⌗</a> </h1>
+<div class="highlight"><div class="code-toolbar"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;" class=" language-bash"><code class=" language-bash" data-lang="bash">./build/Vulkan-Starter
+</code></pre><div class="toolbar"><div class="toolbar-item"><button class="copy-to-clipboard-button" type="button" data-copy-state="copy"><span>Copy</span></button></div></div></div></div><p><img src="./Building a Triangle with Vulkan and C++ in Fedora 37 (Jor-Dani-Elder)_files/triangle-window.png" alt="Hello-Vulkan-Triangle"></p>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr>
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="https://jordanielder.com/posts/building-a-hugo-blog-website-with-digital-ocean-and-github/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Building a Hugo Blog Website with Digital Ocean and GitHub</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="https://jordanielder.com/posts/using-graphql-and-express-js-to-query-users-from-mysql-database/">
+                <span class="button__text">Using GraphQL and Express.js to Query Users from a MySQL Database</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="http://gohugo.io/">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="./Building a Triangle with Vulkan and C++ in Fedora 37 (Jor-Dani-Elder)_files/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+
+
+<!----></body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+  div.grammarly-desktop-integration {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+  }
+
+  div.grammarly-desktop-integration:before {
+    content: attr(data-content);
+  }
+</style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
